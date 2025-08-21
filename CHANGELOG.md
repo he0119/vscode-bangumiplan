@@ -6,9 +6,21 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.1.0]
+
+### Added
+
+- 添加扩展图标
+
 ## [0.0.2]
 
-- 高亮使用标准的名称，删除自带主题
+### Added
+
+- 高亮使用标准的名称
+
+### Removed
+
+- 删除自带主题
 
 ## [0.0.1]
 
