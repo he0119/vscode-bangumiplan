@@ -36,5 +36,10 @@
         "path": "./syntaxes/bangumiplan.tmLanguage.json"
       }
     ]
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#FFFFFF",
+    "theme": "dark"
   }
 }
