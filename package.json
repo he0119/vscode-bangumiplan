@@ -1,7 +1,7 @@
 {
   "name": "bangumiplan",
   "displayName": "BangumiPlan",
-  "description": "",
+  "description": "A VS Code extension for Bangumi planning with clickable BGM IDs",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.103.0"
@@ -9,6 +9,7 @@
   "categories": [
     "Programming Languages"
   ],
+  "main": "./extension.js",
   "contributes": {
     "languages": [
       {

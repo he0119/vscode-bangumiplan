@@ -3,29 +3,20 @@
 	"name": "BangumiPlan",
 	"patterns": [
 		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
+			"include": "#bgm-id"
 		}
 	],
 	"repository": {
-		"keywords": {
+		"bgm-id": {
 			"patterns": [
 				{
-					"name": "keyword.control.bangumiplan",
-					"match": "\\b(if|while|for|return)\\b"
-				}
-			]
-		},
-		"strings": {
-			"name": "string.quoted.double.bangumiplan",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"name": "constant.character.escape.bangumiplan",
-					"match": "\\\\."
+					"name": "entity.name.function.bgm-id.bangumiplan",
+					"match": "\\[\\d+\\]",
+					"captures": {
+						"0": {
+							"name": "markup.underline.link.bgm-id.bangumiplan"
+						}
+					}
 				}
 			]
 		}
