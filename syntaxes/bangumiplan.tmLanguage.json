@@ -28,11 +28,11 @@
 		"status-section": {
 			"patterns": [
 				{
-					"name": "markup.heading.status.bangumiplan",
+					"name": "markup.heading",
 					"match": "^(\\w+):",
 					"captures": {
 						"1": {
-							"name": "entity.name.section.status.bangumiplan"
+							"name": "markup.heading"
 						}
 					}
 				}
@@ -41,11 +41,11 @@
 		"category": {
 			"patterns": [
 				{
-					"name": "markup.heading.category.bangumiplan",
+					"name": "markup.heading",
 					"match": "^\\s{4}(\\w+):",
 					"captures": {
 						"1": {
-							"name": "entity.name.type.category.bangumiplan"
+							"name": "entity.name.type"
 						}
 					}
 				}
@@ -54,92 +54,128 @@
 		"entry-line": {
 			"patterns": [
 				{
-					"name": "meta.entry.with-date-note.bangumiplan",
+					"name": "meta.entry.with-date-note",
 					"match": "^(\\s{8})\\[(\\d+)\\](.+?)<([^>]+)>\\(([^)]+)\\)\\s*$",
 					"captures": {
 						"1": {
-							"name": "punctuation.whitespace.bangumiplan"
+							"name": "punctuation.whitespace"
 						},
 						"2": {
-							"name": "entity.name.function.bgm-id.bangumiplan"
+							"name": "constant.numeric"
 						},
 						"3": {
-							"name": "string.entry-title.bangumiplan"
+							"name": "entity.name"
 						},
 						"4": {
-							"name": "markup.italic.completion-date.bangumiplan"
+							"name": "string.quoted"
 						},
 						"5": {
-							"name": "comment.line.note.bangumiplan"
+							"name": "comment.line"
 						}
 					}
 				},
 				{
-					"name": "meta.entry.with-date.bangumiplan",
+					"name": "meta.entry.with-date",
 					"match": "^(\\s{8})\\[(\\d+)\\](.+?)<([^>]+)>\\s*$",
 					"captures": {
 						"1": {
-							"name": "punctuation.whitespace.bangumiplan"
+							"name": "punctuation.whitespace"
 						},
 						"2": {
-							"name": "entity.name.function.bgm-id.bangumiplan"
+							"name": "constant.numeric"
 						},
 						"3": {
-							"name": "string.entry-title.bangumiplan"
+							"name": "entity.name"
 						},
 						"4": {
-							"name": "markup.italic.completion-date.bangumiplan"
+							"name": "string.quoted"
 						}
 					}
 				},
 				{
-					"name": "meta.entry.no-id-with-date-note.bangumiplan",
+					"name": "meta.entry.no-id-with-date-note",
 					"match": "^(\\s{8})(.+?)<([^>]+)>\\(([^)]+)\\)\\s*$",
 					"captures": {
 						"1": {
-							"name": "punctuation.whitespace.bangumiplan"
+							"name": "punctuation.whitespace"
 						},
 						"2": {
-							"name": "string.entry-title.bangumiplan"
+							"name": "entity.name"
 						},
 						"3": {
-							"name": "markup.italic.completion-date.bangumiplan"
+							"name": "string.quoted"
 						},
 						"4": {
-							"name": "comment.line.note.bangumiplan"
+							"name": "comment.line"
 						}
 					}
 				},
 				{
-					"name": "meta.entry.no-id-with-date.bangumiplan",
+					"name": "meta.entry.no-id-with-date",
 					"match": "^(\\s{8})(.+?)<([^>]+)>\\s*$",
 					"captures": {
 						"1": {
-							"name": "punctuation.whitespace.bangumiplan"
+							"name": "punctuation.whitespace"
 						},
 						"2": {
-							"name": "string.entry-title.bangumiplan"
+							"name": "entity.name"
 						},
 						"3": {
-							"name": "markup.italic.completion-date.bangumiplan"
+							"name": "string.quoted"
 						}
 					}
 				},
 				{
-					"name": "meta.entry.bangumiplan",
+					"name": "meta.entry.with-progress-and-note",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)( √+)\\(([^)]+)\\)\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace"
+						},
+						"2": {
+							"name": "constant.numeric"
+						},
+						"3": {
+							"name": "entity.name"
+						},
+						"4": {
+							"name": "markup.inserted"
+						},
+						"5": {
+							"name": "comment.line"
+						}
+					}
+				},
+				{
+					"name": "meta.entry.with-progress",
 					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)( √+)?\\s*$",
 					"captures": {
 						"1": {
-							"name": "punctuation.whitespace.bangumiplan"
+							"name": "punctuation.whitespace"
 						},
 						"2": {
-							"name": "entity.name.function.bgm-id.bangumiplan"
+							"name": "constant.numeric"
 						},
 						"3": {
-							"name": "string.entry-title.bangumiplan"
+							"name": "entity.name"
 						},
 						"4": {
-							"name": "markup.inserted.watch-marks.bangumiplan"
+							"name": "markup.inserted"
+						}
+					}
+				},
+				{
+					"name": "meta.entry",
+					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace"
+						},
+						"2": {
+							"name": "constant.numeric"
+						},
+						"3": {
+							"name": "entity.name"
 						}
 					}
 				}
@@ -148,11 +184,11 @@
 		"watch-marks": {
 			"patterns": [
 				{
-					"name": "markup.inserted.watch-marks.bangumiplan",
+					"name": "markup.inserted",
 					"match": "√+",
 					"captures": {
 						"0": {
-							"name": "markup.inserted.watch-marks.bangumiplan"
+							"name": "markup.inserted"
 						}
 					}
 				}
@@ -161,11 +197,11 @@
 		"completion-date": {
 			"patterns": [
 				{
-					"name": "markup.italic.completion-date.bangumiplan",
+					"name": "string.quoted",
 					"match": "<([^>]+)>",
 					"captures": {
 						"1": {
-							"name": "markup.italic.completion-date.bangumiplan"
+							"name": "string.quoted"
 						}
 					}
 				}
@@ -174,11 +210,11 @@
 		"note-text": {
 			"patterns": [
 				{
-					"name": "comment.line.note.bangumiplan",
+					"name": "comment.line",
 					"match": "\\(([^)]+)\\)",
 					"captures": {
 						"1": {
-							"name": "comment.line.note.bangumiplan"
+							"name": "comment.line"
 						}
 					}
 				}
@@ -187,11 +223,11 @@
 		"bgm-id": {
 			"patterns": [
 				{
-					"name": "entity.name.function.bgm-id.bangumiplan",
+					"name": "constant.numeric",
 					"match": "\\[(\\d+)\\]",
 					"captures": {
 						"1": {
-							"name": "markup.underline.link.bgm-id.bangumiplan"
+							"name": "constant.numeric"
 						}
 					}
 				}

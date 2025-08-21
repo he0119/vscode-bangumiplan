@@ -2,7 +2,7 @@
   "name": "bangumiplan",
   "displayName": "BangumiPlan",
   "description": "A VS Code extension for Bangumi planning with clickable BGM IDs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "type": "git",
     "url": "https://git.hehome.xyz/he0119/vscode-bangumiplan.git"
@@ -34,18 +34,6 @@
         "language": "bangumiplan",
         "scopeName": "source.bangumiplan",
         "path": "./syntaxes/bangumiplan.tmLanguage.json"
-      }
-    ],
-    "themes": [
-      {
-        "label": "BangumiPlan Dark",
-        "uiTheme": "vs-dark",
-        "path": "./themes/bangumiplan-color-theme.json"
-      },
-      {
-        "label": "BangumiPlan Light",
-        "uiTheme": "vs",
-        "path": "./themes/bangumiplan-light-color-theme.json"
       }
     ]
   }
