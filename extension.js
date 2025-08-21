@@ -82,25 +82,60 @@ class WatchCountHoverProvider {
       }
 
       // 如果鼠标悬浮在条目标题上，也显示观看进度
-      const entryRegex = /^(\s{8})(\[(\d+)\])?(.+?)( √+)?\s*$/;
-      const entryMatch = lineText.match(entryRegex);
+      // 支持多种格式：
+      // 1. [ID]标题<日期>(说明)
+      // 2. [ID]标题<日期>
+      // 3. [ID]标题 √√√
+      // 4. [ID]标题
+      const entryWithDateNoteRegex =
+        /^(\s{8})(\[(\d+)\])(.+?)(<[^>]+>)(\([^)]+\))\s*$/;
+      const entryWithDateRegex = /^(\s{8})(\[(\d+)\])(.+?)(<[^>]+>)\s*$/;
+      const entryWithWatchMarksRegex = /^(\s{8})(\[(\d+)\])?(.+?)( √+)\s*$/;
+      const entryBasicRegex = /^(\s{8})(\[(\d+)\])?(.+?)\s*$/;
 
-      if (entryMatch) {
+      let entryMatch = null;
+      let formatType = "";
+      let bgmId = null;
+      let title = "";
+      let completionDate = "";
+      let noteText = "";
+      let watchMarks = "";
+
+      // 按优先级匹配不同格式
+      if ((entryMatch = lineText.match(entryWithDateNoteRegex))) {
+        formatType = "dateNote";
+        bgmId = entryMatch[3];
+        title = entryMatch[4]?.trim();
+        completionDate = entryMatch[5];
+        noteText = entryMatch[6];
+      } else if ((entryMatch = lineText.match(entryWithDateRegex))) {
+        formatType = "date";
+        bgmId = entryMatch[3];
+        title = entryMatch[4]?.trim();
+        completionDate = entryMatch[5];
+      } else if ((entryMatch = lineText.match(entryWithWatchMarksRegex))) {
+        formatType = "watchMarks";
+        bgmId = entryMatch[3];
+        title = entryMatch[4]?.trim();
+        watchMarks = entryMatch[5];
+      } else if ((entryMatch = lineText.match(entryBasicRegex))) {
+        formatType = "basic";
+        bgmId = entryMatch[3];
+        title = entryMatch[4]?.trim();
+      }
+
+      if (entryMatch && title) {
         const indent = entryMatch[1] || "";
         const bgmIdMatch = entryMatch[2] || "";
-        const bgmId = entryMatch[3];
-        const title = entryMatch[4]?.trim();
-        const watchMarks = entryMatch[5];
 
         // 计算标题的位置范围
         const titleStart = indent.length + bgmIdMatch.length;
-        const titleEnd = titleStart + (title ? title.length : 0);
+        const titleEnd = titleStart + title.length;
 
         // 检查鼠标是否在标题范围内
         if (
           position.character >= titleStart &&
-          position.character <= titleEnd &&
-          title
+          position.character <= titleEnd
         ) {
           const hoverText = new vscode.MarkdownString();
           hoverText.appendMarkdown(`**${title}**\n\n`);
@@ -111,12 +146,24 @@ class WatchCountHoverProvider {
             );
           }
 
-          if (watchMarks) {
+          // 根据格式类型显示不同信息
+          if (formatType === "dateNote") {
+            const cleanDate = completionDate.replace(/[<>]/g, "");
+            const cleanNote = noteText.replace(/[()]/g, "");
+            hoverText.appendMarkdown(`完成日期: **${cleanDate}**\n\n`);
+            hoverText.appendMarkdown(`说明: *${cleanNote}*\n\n`);
+            hoverText.appendMarkdown(`状态: **已完成**`);
+          } else if (formatType === "date") {
+            const cleanDate = completionDate.replace(/[<>]/g, "");
+            hoverText.appendMarkdown(`完成日期: **${cleanDate}**\n\n`);
+            hoverText.appendMarkdown(`状态: **已完成**`);
+          } else if (formatType === "watchMarks") {
             const count = watchMarks.trim().length;
             hoverText.appendMarkdown(`观看进度: **${count}** 集\n\n`);
-            hoverText.appendMarkdown(`进度标记: \`${watchMarks.trim()}\``);
+            hoverText.appendMarkdown(`进度标记: \`${watchMarks.trim()}\`\n\n`);
+            hoverText.appendMarkdown(`状态: **观看中**`);
           } else {
-            hoverText.appendMarkdown(`观看进度: **未开始**`);
+            hoverText.appendMarkdown(`状态: **未开始**`);
           }
 
           const range = new vscode.Range(
@@ -125,6 +172,57 @@ class WatchCountHoverProvider {
           );
 
           return new vscode.Hover(hoverText, range);
+        }
+
+        // 检查鼠标是否悬浮在完成日期上
+        if (
+          (formatType === "dateNote" || formatType === "date") &&
+          completionDate
+        ) {
+          const dateStart = titleStart + title.length;
+          const dateEnd = dateStart + completionDate.length;
+
+          if (
+            position.character >= dateStart &&
+            position.character <= dateEnd
+          ) {
+            const cleanDate = completionDate.replace(/[<>]/g, "");
+            const hoverText = new vscode.MarkdownString();
+            hoverText.appendMarkdown(`**完成日期**\n\n`);
+            hoverText.appendMarkdown(`日期: **${cleanDate}**\n\n`);
+            hoverText.appendMarkdown(`作品: **${title}**`);
+
+            const range = new vscode.Range(
+              new vscode.Position(position.line, dateStart),
+              new vscode.Position(position.line, dateEnd)
+            );
+
+            return new vscode.Hover(hoverText, range);
+          }
+        }
+
+        // 检查鼠标是否悬浮在说明文字上
+        if (formatType === "dateNote" && noteText) {
+          const noteStart = titleStart + title.length + completionDate.length;
+          const noteEnd = noteStart + noteText.length;
+
+          if (
+            position.character >= noteStart &&
+            position.character <= noteEnd
+          ) {
+            const cleanNote = noteText.replace(/[()]/g, "");
+            const hoverText = new vscode.MarkdownString();
+            hoverText.appendMarkdown(`**说明**\n\n`);
+            hoverText.appendMarkdown(`${cleanNote}\n\n`);
+            hoverText.appendMarkdown(`作品: **${title}**`);
+
+            const range = new vscode.Range(
+              new vscode.Position(position.line, noteStart),
+              new vscode.Position(position.line, noteEnd)
+            );
+
+            return new vscode.Hover(hoverText, range);
+          }
         }
       }
 

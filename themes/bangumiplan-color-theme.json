@@ -41,6 +41,22 @@
         "foreground": "#4CAF50",
         "fontStyle": "bold"
       }
+    },
+    {
+      "name": "Completion Date",
+      "scope": "markup.italic.completion-date.bangumiplan",
+      "settings": {
+        "foreground": "#CE9178",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "Note Text",
+      "scope": "comment.line.note.bangumiplan",
+      "settings": {
+        "foreground": "#6A9955",
+        "fontStyle": "italic"
+      }
     }
   ]
 }

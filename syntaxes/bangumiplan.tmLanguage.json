@@ -15,6 +15,12 @@
 			"include": "#watch-marks"
 		},
 		{
+			"include": "#completion-date"
+		},
+		{
+			"include": "#note-text"
+		},
+		{
 			"include": "#bgm-id"
 		}
 	],
@@ -48,8 +54,47 @@
 		"entry-line": {
 			"patterns": [
 				{
+					"name": "meta.entry.with-date-note.bangumiplan",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)<([^>]+)>\\(([^)]+)\\)\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace.bangumiplan"
+						},
+						"2": {
+							"name": "entity.name.function.bgm-id.bangumiplan"
+						},
+						"3": {
+							"name": "string.entry-title.bangumiplan"
+						},
+						"4": {
+							"name": "markup.italic.completion-date.bangumiplan"
+						},
+						"5": {
+							"name": "comment.line.note.bangumiplan"
+						}
+					}
+				},
+				{
+					"name": "meta.entry.with-date.bangumiplan",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)<([^>]+)>\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace.bangumiplan"
+						},
+						"2": {
+							"name": "entity.name.function.bgm-id.bangumiplan"
+						},
+						"3": {
+							"name": "string.entry-title.bangumiplan"
+						},
+						"4": {
+							"name": "markup.italic.completion-date.bangumiplan"
+						}
+					}
+				},
+				{
 					"name": "meta.entry.bangumiplan",
-					"match": "^(\\s{8})(\\[\\d+\\])?(.+?)( √+)?\\s*$",
+					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)( √+)?\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace.bangumiplan"
@@ -80,13 +125,39 @@
 				}
 			]
 		},
+		"completion-date": {
+			"patterns": [
+				{
+					"name": "markup.italic.completion-date.bangumiplan",
+					"match": "<([^>]+)>",
+					"captures": {
+						"1": {
+							"name": "markup.italic.completion-date.bangumiplan"
+						}
+					}
+				}
+			]
+		},
+		"note-text": {
+			"patterns": [
+				{
+					"name": "comment.line.note.bangumiplan",
+					"match": "\\(([^)]+)\\)",
+					"captures": {
+						"1": {
+							"name": "comment.line.note.bangumiplan"
+						}
+					}
+				}
+			]
+		},
 		"bgm-id": {
 			"patterns": [
 				{
 					"name": "entity.name.function.bgm-id.bangumiplan",
-					"match": "\\[\\d+\\]",
+					"match": "\\[(\\d+)\\]",
 					"captures": {
-						"0": {
+						"1": {
 							"name": "markup.underline.link.bgm-id.bangumiplan"
 						}
 					}
