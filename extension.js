@@ -91,14 +91,14 @@ class WatchCountHoverProvider {
       // 6. [ID]标题 √√√
       // 7. [ID]标题
       const entryWithDateNoteRegex =
-        /^(\s{8})(\[(\d+)\])(.+?)(<[^>]+>)(\([^)]+\))\s*$/;
-      const entryWithDateRegex = /^(\s{8})(\[(\d+)\])(.+?)(<[^>]+>)\s*$/;
+        /^(\s{8})(\[(\d+)\])(.+?)\s*(<[^>]+>)\s*(\([^)]+\))\s*$/;
+      const entryWithDateRegex = /^(\s{8})(\[(\d+)\])(.+?)\s*(<[^>]+>)\s*$/;
       const entryNoIdWithDateNoteRegex =
-        /^(\s{8})(.+?)(<[^>]+>)(\([^)]+\))\s*$/;
-      const entryNoIdWithDateRegex = /^(\s{8})(.+?)(<[^>]+>)\s*$/;
+        /^(\s{8})(.+?)\s*(<[^>]+>)\s*(\([^)]+\))\s*$/;
+      const entryNoIdWithDateRegex = /^(\s{8})(.+?)\s*(<[^>]+>)\s*$/;
       const entryWithWatchMarksAndNoteRegex =
-        /^(\s{8})(\[(\d+)\])?(.+?)( √+)(\([^)]+\))\s*$/;
-      const entryWithWatchMarksRegex = /^(\s{8})(\[(\d+)\])?(.+?)( √+)\s*$/;
+        /^(\s{8})(\[(\d+)\])?(.+?)\s*(√+)\s*(\([^)]+\))\s*$/;
+      const entryWithWatchMarksRegex = /^(\s{8})(\[(\d+)\])?(.+?)\s*(√+)\s*$/;
       const entryBasicRegex = /^(\s{8})(\[(\d+)\])?(.+?)\s*$/;
 
       let entryMatch = null;
@@ -138,13 +138,13 @@ class WatchCountHoverProvider {
         formatType = "watchMarksNote";
         bgmId = entryMatch[3];
         title = entryMatch[4]?.trim();
-        watchMarks = entryMatch[5];
+        watchMarks = entryMatch[5]?.trim();
         noteText = entryMatch[6];
       } else if ((entryMatch = lineText.match(entryWithWatchMarksRegex))) {
         formatType = "watchMarks";
         bgmId = entryMatch[3];
         title = entryMatch[4]?.trim();
-        watchMarks = entryMatch[5];
+        watchMarks = entryMatch[5]?.trim();
       } else if ((entryMatch = lineText.match(entryBasicRegex))) {
         formatType = "basic";
         bgmId = entryMatch[3];
@@ -198,15 +198,15 @@ class WatchCountHoverProvider {
             const cleanDate = completionDate.replace(/[<>]/g, "");
             hoverText.appendMarkdown(`完成日期: **${cleanDate}**`);
           } else if (formatType === "watchMarksNote") {
-            const count = watchMarks.trim().length;
+            const count = watchMarks ? watchMarks.length : 0;
             const cleanNote = noteText.replace(/[()]/g, "");
             hoverText.appendMarkdown(`观看进度: **${count}** 集\n\n`);
-            hoverText.appendMarkdown(`进度标记: \`${watchMarks.trim()}\`\n\n`);
+            hoverText.appendMarkdown(`进度标记: \`${watchMarks}\`\n\n`);
             hoverText.appendMarkdown(`说明: *${cleanNote}*`);
           } else if (formatType === "watchMarks") {
-            const count = watchMarks.trim().length;
+            const count = watchMarks ? watchMarks.length : 0;
             hoverText.appendMarkdown(`观看进度: **${count}** 集\n\n`);
-            hoverText.appendMarkdown(`进度标记: \`${watchMarks.trim()}\``);
+            hoverText.appendMarkdown(`进度标记: \`${watchMarks}\``);
           }
 
           const range = new vscode.Range(
@@ -276,7 +276,8 @@ class WatchCountHoverProvider {
 
         // 检查鼠标是否悬浮在观看标记+说明格式的说明文字上
         if (formatType === "watchMarksNote" && noteText) {
-          const noteStart = titleStart + title.length + watchMarks.length;
+          const noteStart =
+            titleStart + title.length + (watchMarks ? watchMarks.length : 0);
           const noteEnd = noteStart + noteText.length;
 
           if (

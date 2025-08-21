@@ -55,7 +55,7 @@
 			"patterns": [
 				{
 					"name": "meta.entry.with-date-note",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)<([^>]+)>\\(([^)]+)\\)\\s*$",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*<([^>]+)>\\s*\\(([^)]+)\\)\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
@@ -76,7 +76,7 @@
 				},
 				{
 					"name": "meta.entry.with-date",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)<([^>]+)>\\s*$",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*<([^>]+)>\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
@@ -94,7 +94,7 @@
 				},
 				{
 					"name": "meta.entry.no-id-with-date-note",
-					"match": "^(\\s{8})(.+?)<([^>]+)>\\(([^)]+)\\)\\s*$",
+					"match": "^(\\s{8})(.+?)\\s*<([^>]+)>\\s*\\(([^)]+)\\)\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
@@ -112,7 +112,7 @@
 				},
 				{
 					"name": "meta.entry.no-id-with-date",
-					"match": "^(\\s{8})(.+?)<([^>]+)>\\s*$",
+					"match": "^(\\s{8})(.+?)\\s*<([^>]+)>\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
@@ -127,7 +127,7 @@
 				},
 				{
 					"name": "meta.entry.with-progress-and-note",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)( √+)\\(([^)]+)\\)\\s*$",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*(√+)\\s*\\(([^)]+)\\)\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
@@ -148,7 +148,7 @@
 				},
 				{
 					"name": "meta.entry.with-progress",
-					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)( √+)?\\s*$",
+					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)\\s*(√+)?\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
