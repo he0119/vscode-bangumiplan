@@ -1,0 +1,46 @@
+{
+  "name": "BangumiPlan Light Theme",
+  "type": "light",
+  "colors": {},
+  "tokenColors": [
+    {
+      "name": "Status Section (正在看/搁置)",
+      "scope": "entity.name.section.status.bangumiplan",
+      "settings": {
+        "foreground": "#0066CC",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Category (动画/电视剧等)",
+      "scope": "entity.name.type.category.bangumiplan",
+      "settings": {
+        "foreground": "#0077AA",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Entry Title",
+      "scope": "string.entry-title.bangumiplan",
+      "settings": {
+        "foreground": "#333333"
+      }
+    },
+    {
+      "name": "BGM ID",
+      "scope": "entity.name.function.bgm-id.bangumiplan",
+      "settings": {
+        "foreground": "#795E26",
+        "fontStyle": "underline"
+      }
+    },
+    {
+      "name": "Watch Marks (√)",
+      "scope": "markup.inserted.watch-marks.bangumiplan",
+      "settings": {
+        "foreground": "#388E3C",
+        "fontStyle": "bold"
+      }
+    }
+  ]
+}

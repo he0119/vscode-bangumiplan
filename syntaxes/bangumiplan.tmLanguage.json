@@ -3,10 +3,83 @@
 	"name": "BangumiPlan",
 	"patterns": [
 		{
+			"include": "#status-section"
+		},
+		{
+			"include": "#category"
+		},
+		{
+			"include": "#entry-line"
+		},
+		{
+			"include": "#watch-marks"
+		},
+		{
 			"include": "#bgm-id"
 		}
 	],
 	"repository": {
+		"status-section": {
+			"patterns": [
+				{
+					"name": "markup.heading.status.bangumiplan",
+					"match": "^(\\w+):",
+					"captures": {
+						"1": {
+							"name": "entity.name.section.status.bangumiplan"
+						}
+					}
+				}
+			]
+		},
+		"category": {
+			"patterns": [
+				{
+					"name": "markup.heading.category.bangumiplan",
+					"match": "^\\s{4}(\\w+):",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.category.bangumiplan"
+						}
+					}
+				}
+			]
+		},
+		"entry-line": {
+			"patterns": [
+				{
+					"name": "meta.entry.bangumiplan",
+					"match": "^(\\s{8})(\\[\\d+\\])?(.+?)( √+)?\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace.bangumiplan"
+						},
+						"2": {
+							"name": "entity.name.function.bgm-id.bangumiplan"
+						},
+						"3": {
+							"name": "string.entry-title.bangumiplan"
+						},
+						"4": {
+							"name": "markup.inserted.watch-marks.bangumiplan"
+						}
+					}
+				}
+			]
+		},
+		"watch-marks": {
+			"patterns": [
+				{
+					"name": "markup.inserted.watch-marks.bangumiplan",
+					"match": "√+",
+					"captures": {
+						"0": {
+							"name": "markup.inserted.watch-marks.bangumiplan"
+						}
+					}
+				}
+			]
+		},
 		"bgm-id": {
 			"patterns": [
 				{

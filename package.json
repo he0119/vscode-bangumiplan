@@ -30,6 +30,18 @@
         "scopeName": "source.bangumiplan",
         "path": "./syntaxes/bangumiplan.tmLanguage.json"
       }
+    ],
+    "themes": [
+      {
+        "label": "BangumiPlan Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/bangumiplan-color-theme.json"
+      },
+      {
+        "label": "BangumiPlan Light",
+        "uiTheme": "vs",
+        "path": "./themes/bangumiplan-light-color-theme.json"
+      }
     ]
   }
 }
