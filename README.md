@@ -1,28 +1,58 @@
 # BangumiPlan 扩展
 
-这是一个专为番剧追踪计划文件设计的 VS Code 扩展。
+这是一个专为番剧追踪计划文件设计的 VS Code 扩展，提供语法高亮、智能悬浮提示和便捷链接跳转功能。
 
 ## 功能特性
 
 ### 🎨 语法高亮
 
-- **状态标题**：`正在看`、`搁置` 等状态用蓝色高亮显示
-- **分类标题**：`动画`、`电视剧`、`云游戏` 等分类用青色高亮显示
-- **BGM ID**：`[数字]` 格式的 BGM ID 用黄色下划线显示，点击可跳转到对应的 BGM 页面
+- **状态标题**：`正在看`、`搁置` 等状态用蓝色粗体显示
+- **分类标题**：`动画`、`电视剧`、`云游戏` 等分类用青色粗体显示
+- **BGM ID**：`[数字]` 格式的 BGM ID 用黄色下划线显示
 - **观看标记**：`√` 符号用绿色粗体显示，表示观看进度
 - **条目标题**：作品名称用默认颜色显示
+- **完成日期**：`<日期>` 格式的完成日期用橙色斜体显示
+- **说明文字**：`(说明)` 格式的说明文字用灰色显示
 
 ### 🖱️ 智能悬浮提示
 
-- **观看计数**：鼠标悬浮在 `√` 符号上时，自动显示观看的集数
-- **条目信息**：鼠标悬浮在条目标题上时，显示作品信息和观看进度
-- **BGM 链接**：鼠标悬浮在 BGM ID 上时，显示跳转提示
+- **观看计数**：鼠标悬浮在 `√` 符号上时，自动统计并显示观看的集数
+- **条目信息**：鼠标悬浮在条目标题上时，显示作品信息、BGM 链接和观看进度
+- **完成日期**：鼠标悬浮在日期上时，显示完成日期详情
+- **说明文字**：鼠标悬浮在说明上时，显示说明内容详情
 
 ### 🔗 点击跳转
 
 - 点击 BGM ID（如 `[512190]`）可直接跳转到对应的 BGM 网站页面
 
+### 🎭 主题支持
+
+- **暗色主题**：BangumiPlan Dark - 适配深色编辑器环境
+- **浅色主题**：BangumiPlan Light - 适配浅色编辑器环境
+
 ## 文件格式示例
+
+BangumiPlan 支持多种灵活的格式，以适应不同的追踪需求：
+
+### 基础格式
+
+```text
+正在看:
+    动画:
+        [512190]琉璃的宝石 √√√√√√√
+        [524707]我怎么可能成为你的恋人，不行不行！(※不是不可能！？) √√√√√√√
+```
+
+### 带完成日期的格式
+
+```text
+看完:
+    动画:
+        [95225]Fate/stay night [Unlimited Blade Works]<2024-12-15>
+        [448677]非人哉 第三季<2024-11-20>(推荐)
+```
+
+### 混合格式
 
 ```text
 正在看:
@@ -34,15 +64,20 @@
         [95225]Fate/stay night [Unlimited Blade Works]
     电视剧:
         异形：地球 √√
-        基地 第三季 √
+        基地 第三季<2024-11-15> √
     云游戏:
         明日方舟:孤星 [正在观看 CW-2]
 
 搁置:
     动画:
-        [448677]非人哉 第三季 √
-        [492199]明日方舟：焰烬曙明 √
+        [448677]非人哉 第三季<2024-10-15>(暂停) √
+        [492199]明日方舟：焰烬曙明<2024-09-20> √
         [485936]mono女孩 √√
+
+看完:
+    动画:
+        [123456]某部动画<2024-08-15>(很棒的作品)
+        无BGM ID的作品<2024-07-20>(经典)
 ```
 
 ## 使用说明
@@ -51,72 +86,53 @@
 2. 按照上述格式编写你的追番计划
 3. 享受语法高亮和智能提示功能！
 
+### 支持的格式
+
+BangumiPlan 支持以下多种格式，可以灵活组合使用：
+
+- **带 BGM ID 和观看进度**：`[BGM_ID]作品名称 √√√`
+- **带 BGM ID 和完成日期**：`[BGM_ID]作品名称<YYYY-MM-DD>`
+- **带 BGM ID、完成日期和说明**：`[BGM_ID]作品名称<YYYY-MM-DD>(说明文字)`
+- **无 BGM ID 带完成日期**：`作品名称<YYYY-MM-DD>`
+- **无 BGM ID 带完成日期和说明**：`作品名称<YYYY-MM-DD>(说明文字)`
+- **仅作品名称**：`作品名称`
+
 ### 格式规则
 
-- 使用4个空格缩进表示分类
+- 使用4个空格缩进表示分类（如：`动画:`、`电视剧:`）
 - 使用8个空格缩进表示具体条目
-- `[数字]` 格式表示 BGM ID
+- `[数字]` 格式表示 BGM ID，支持点击跳转
 - `√` 符号表示观看进度，每个 `√` 代表一集
+- `<日期>` 格式表示完成日期，如 `<2024-12-15>`
+- `(文字)` 格式表示说明或备注信息
 
 ## 安装使用
 
-1. 在 VS Code 中打开扩展文件夹
-2. 按 `F5` 启动扩展开发主机
-3. 在新窗口中打开 `.bp` 文件
-4. 享受语法高亮和智能提示功能
+### 开发模式
+
+1. 克隆或下载此扩展项目
+2. 在 VS Code 中打开扩展文件夹
+3. 按 `F5` 启动扩展开发主机
+4. 在新窗口中创建或打开 `.bp` 文件
+5. 享受语法高亮和智能提示功能
+
+### 打包安装
+
+1. 确保已安装 `@vscode/vsce` 工具：`npm install -g @vscode/vsce`
+2. 在扩展根目录运行：`vsce package`
+3. 生成的 `.vsix` 文件可以通过 VS Code 安装
 
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request 来改进这个扩展！
 
-## Requirements
+## 版本说明
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+### 0.0.1
 
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- ✅ 基础语法高亮支持
+- ✅ BGM ID 点击跳转功能
+- ✅ 智能悬浮提示
+- ✅ 支持多种条目格式
+- ✅ 完成日期和说明文字支持
+- ✅ 深色和浅色主题支持
