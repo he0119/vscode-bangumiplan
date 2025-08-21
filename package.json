@@ -1,0 +1,34 @@
+{
+  "name": "bangumiplan",
+  "displayName": "BangumiPlan",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.103.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "bangumiplan",
+        "aliases": [
+          "BangumiPlan",
+          "bangumiplan"
+        ],
+        "extensions": [
+          ".bp"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "bangumiplan",
+        "scopeName": "source.bangumiplan",
+        "path": "./syntaxes/bangumiplan.tmLanguage.json"
+      }
+    ]
+  }
+}
