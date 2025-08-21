@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Removed
+
+- 移除 galleryBanner 配置
+
 ## [0.1.1] - 2025-08-21
 
 ### Changed

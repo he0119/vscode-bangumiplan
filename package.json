@@ -37,9 +37,5 @@
       }
     ]
   },
-  "icon": "images/icon.png",
-  "galleryBanner": {
-    "color": "#FFFFFF",
-    "theme": "dark"
-  }
+  "icon": "images/icon.png"
 }
