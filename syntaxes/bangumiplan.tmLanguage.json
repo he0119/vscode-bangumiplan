@@ -93,6 +93,39 @@
 					}
 				},
 				{
+					"name": "meta.entry.no-id-with-date-note.bangumiplan",
+					"match": "^(\\s{8})(.+?)<([^>]+)>\\(([^)]+)\\)\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace.bangumiplan"
+						},
+						"2": {
+							"name": "string.entry-title.bangumiplan"
+						},
+						"3": {
+							"name": "markup.italic.completion-date.bangumiplan"
+						},
+						"4": {
+							"name": "comment.line.note.bangumiplan"
+						}
+					}
+				},
+				{
+					"name": "meta.entry.no-id-with-date.bangumiplan",
+					"match": "^(\\s{8})(.+?)<([^>]+)>\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace.bangumiplan"
+						},
+						"2": {
+							"name": "string.entry-title.bangumiplan"
+						},
+						"3": {
+							"name": "markup.italic.completion-date.bangumiplan"
+						}
+					}
+				},
+				{
 					"name": "meta.entry.bangumiplan",
 					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)( √+)?\\s*$",
 					"captures": {
