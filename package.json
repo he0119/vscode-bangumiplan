@@ -11,8 +11,12 @@
   "engines": {
     "vscode": "^1.103.0"
   },
+  "icon": "images/icon.png",
   "categories": [
     "Programming Languages"
+  ],
+  "keywords": [
+    "bangumi"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -36,6 +40,5 @@
         "path": "./syntaxes/bangumiplan.tmLanguage.json"
       }
     ]
-  },
-  "icon": "images/icon.png"
+  }
 }

@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Added
+
+- 添加关键词
+
 ## [0.1.2] - 2025-08-21
 
 ### Removed
