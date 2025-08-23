@@ -147,6 +147,39 @@
 					}
 				},
 				{
+					"name": "meta.entry.no-id-with-progress-and-note",
+					"match": "^(\\s{8})(.+?)\\s*(√+)\\s*\\(([^)]+)\\)\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace"
+						},
+						"2": {
+							"name": "entity.name"
+						},
+						"3": {
+							"name": "markup.inserted"
+						},
+						"4": {
+							"name": "comment.line"
+						}
+					}
+				},
+				{
+					"name": "meta.entry.no-id-with-progress",
+					"match": "^(\\s{8})(.+?)\\s*(√+)\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace"
+						},
+						"2": {
+							"name": "entity.name"
+						},
+						"3": {
+							"name": "markup.inserted"
+						}
+					}
+				},
+				{
 					"name": "meta.entry.with-progress",
 					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)\\s*(√+)?\\s*$",
 					"captures": {
