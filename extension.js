@@ -63,36 +63,44 @@ class hoverProvider {
       };
     };
 
-    // 基础偏移量
-    let offset = indent.length;
+    // 重新计算各部分真实列位置，考虑标题/进度/日期/说明之间未捕获的空格
+    // 初始光标位置：缩进 + 可选 ID + 原始标题（不 trim, 因为正则第三组是最小匹配并包含尾部空格）
     const idPart = bgmId ? `[${bgmId}]` : "";
+    const rawTitle = titleRaw || ""; // 保留原样（含尾部空格）以便定位后续片段
+    let cursor = indent.length + idPart.length + rawTitle.length; // 指向标题后第一个字符
 
-    // 标题范围
-    const titleStart = offset + idPart.length;
-    const titleRange = makeRange(titleStart, title);
+    // 标题范围：用 trim 后的标题显示，但开始位置需要跳过标题前的空格（第三组最前不会有空格）
+    // 处理：找到 rawTitle 中 trim 后的起始与结束偏移
+    const leadingSpacesInTitle = rawTitle.length - rawTitle.trimStart().length;
+    const trailingSpacesInTitle = rawTitle.length - rawTitle.trimEnd().length;
+    const titleVisibleStart =
+      indent.length + idPart.length + leadingSpacesInTitle;
+    const titleVisibleText = rawTitle.trim();
+    const titleRange = makeRange(titleVisibleStart, titleVisibleText);
 
-    // 进度符号范围（在标题后）
-    const marksRange = marks
-      ? makeRange(titleRange.range.end.character, marks)
-      : null;
+    // 从标题结尾（含尾部空格）开始解析 marks/date/note，每次用剩余子串的前缀正则 ^\s*...
+    const sliceFrom = (pos) => line.slice(pos);
+    const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const locateSegment = (tokenText) => {
+      const after = sliceFrom(cursor);
+      const re = new RegExp(`^(\\s*)${escapeRegex(tokenText)}`);
+      const mm = after.match(re);
+      if (!mm) return null;
+      const spacesLen = mm[1].length;
+      const start = cursor + spacesLen;
+      const rangeObj = makeRange(start, tokenText);
+      cursor = start + tokenText.length;
+      return rangeObj;
+    };
 
-    // 日期范围（在进度符号后）
-    const dateRange = date
-      ? makeRange(
-          marksRange?.range.end.character || titleRange.range.end.character,
-          `<${date}>`
-        )
-      : null;
-
-    // 说明范围（在日期后）
-    const noteRange = note
-      ? makeRange(
-          dateRange?.range.end.character ||
-            marksRange?.range.end.character ||
-            titleRange.range.end.character,
-          `(${note})`
-        )
-      : null;
+    // 进度符号
+    const marksRange = marks ? locateSegment(marks) : null;
+    // 日期
+    const dateToken = date ? `<${date}>` : null;
+    const dateRange = dateToken ? locateSegment(dateToken) : null;
+    // 说明
+    const noteToken = note ? `(${note})` : null;
+    const noteRange = noteToken ? locateSegment(noteToken) : null;
 
     // 抽取 hover 内容构建函数
     const buildHover = (type, data) => {
