@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复无 ID 格式无法正常高亮的问题
+
 ## [0.1.3] - 2025-08-21
 
 ### Added
