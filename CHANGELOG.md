@@ -6,9 +6,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-08-23
+
 ### Changed
 
 - 统一使用一个正则表达式匹配条目
+
+## [0.1.5] - 2025-08-23
 
 ### Fixed
 
@@ -58,7 +62,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Initial release
 
-[Unreleased]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/he0119/vscode-bangumiplan/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.5...v0.2.0
+[0.1.5]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.1...v0.1.2
