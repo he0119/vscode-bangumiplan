@@ -1,47 +1,29 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "BangumiPlan",
+	"scopeName": "source.bangumiplan",
 	"patterns": [
 		{
-			"include": "#status-section"
+			"include": "#header"
 		},
 		{
-			"include": "#category"
-		},
-		{
-			"include": "#entry-line"
-		},
-		{
-			"include": "#watch-marks"
-		},
-		{
-			"include": "#completion-date"
-		},
-		{
-			"include": "#note-text"
-		},
-		{
-			"include": "#bgm-id"
+			"include": "#entry"
 		}
 	],
 	"repository": {
-		"status-section": {
+		"header": {
 			"patterns": [
 				{
-					"name": "markup.heading",
+					"name": "markup.heading.section",
 					"match": "^(\\w+):",
 					"captures": {
 						"1": {
 							"name": "markup.heading"
 						}
 					}
-				}
-			]
-		},
-		"category": {
-			"patterns": [
+				},
 				{
-					"name": "markup.heading",
+					"name": "entity.name.type.category",
 					"match": "^\\s{4}(\\w+):",
 					"captures": {
 						"1": {
@@ -51,233 +33,57 @@
 				}
 			]
 		},
-		"entry-line": {
+		"entry": {
 			"patterns": [
-				{
-					"name": "meta.entry.with-date-note",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*<([^>]+)>\\s*\\(([^)]+)\\)\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "constant.numeric"
-						},
-						"3": {
-							"name": "entity.name"
-						},
-						"4": {
-							"name": "string.quoted"
-						},
-						"5": {
-							"name": "comment.line"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.with-date",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*<([^>]+)>\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "constant.numeric"
-						},
-						"3": {
-							"name": "entity.name"
-						},
-						"4": {
-							"name": "string.quoted"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.no-id-with-date-note",
-					"match": "^(\\s{8})(.+?)\\s*<([^>]+)>\\s*\\(([^)]+)\\)\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "entity.name"
-						},
-						"3": {
-							"name": "string.quoted"
-						},
-						"4": {
-							"name": "comment.line"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.no-id-with-date",
-					"match": "^(\\s{8})(.+?)\\s*<([^>]+)>\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "entity.name"
-						},
-						"3": {
-							"name": "string.quoted"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.with-progress-and-note",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*(√+)\\s*\\(([^)]+)\\)\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "constant.numeric"
-						},
-						"3": {
-							"name": "entity.name"
-						},
-						"4": {
-							"name": "markup.inserted"
-						},
-						"5": {
-							"name": "comment.line"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.with-progress",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*(√+)\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "constant.numeric"
-						},
-						"3": {
-							"name": "entity.name"
-						},
-						"4": {
-							"name": "markup.inserted"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.no-id-with-progress-and-note",
-					"match": "^(\\s{8})(.+?)\\s*(√+)\\s*\\(([^)]+)\\)\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "entity.name"
-						},
-						"3": {
-							"name": "markup.inserted"
-						},
-						"4": {
-							"name": "comment.line"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.no-id-with-progress",
-					"match": "^(\\s{8})(.+?)\\s*(√+)\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "entity.name"
-						},
-						"3": {
-							"name": "markup.inserted"
-						}
-					}
-				},
-				{
-					"name": "meta.entry.with-id",
-					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*$",
-					"captures": {
-						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
-							"name": "constant.numeric"
-						},
-						"3": {
-							"name": "entity.name"
-						}
-					}
-				},
 				{
 					"name": "meta.entry",
-					"match": "^(\\s{8})(.+?)\\s*$",
+					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)(?:\\s*(√+))?(?:\\s*<([^>]+)>)?(?:\\s*(?:(?<=√+)|(?<=<[^>]+>))\\(([^)]+)\\))?\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
 						},
 						"2": {
-							"name": "entity.name"
+							"name": "constant.numeric.bgm-id"
+						},
+						"3": {
+							"name": "entity.name.title"
+						},
+						"4": {
+							"name": "constant.character.progress"
+						},
+						"5": {
+							"name": "constant.other.date"
+						},
+						"6": {
+							"name": "comment.note"
 						}
 					}
 				}
 			]
 		},
-		"watch-marks": {
+		"meta": {
 			"patterns": [
 				{
-					"name": "markup.inserted",
-					"match": "√+",
-					"captures": {
-						"0": {
-							"name": "markup.inserted"
-						}
-					}
-				}
-			]
-		},
-		"completion-date": {
-			"patterns": [
+					"name": "constant.character.progress",
+					"match": "√+"
+				},
 				{
-					"name": "string.quoted",
-					"match": "<([^>]+)>",
-					"captures": {
-						"1": {
-							"name": "string.quoted"
-						}
-					}
-				}
-			]
-		},
-		"note-text": {
-			"patterns": [
+					"name": "constant.other.date",
+					"begin": "<",
+					"end": ">",
+					"patterns": []
+				},
 				{
-					"name": "comment.line",
-					"match": "\\(([^)]+)\\)",
-					"captures": {
-						"1": {
-							"name": "comment.line"
-						}
-					}
-				}
-			]
-		},
-		"bgm-id": {
-			"patterns": [
+					"name": "comment.note",
+					"begin": "\\(",
+					"end": "\\)",
+					"patterns": []
+				},
 				{
-					"name": "constant.numeric",
-					"match": "\\[(\\d+)\\]",
-					"captures": {
-						"1": {
-							"name": "constant.numeric"
-						}
-					}
+					"name": "constant.numeric.bgm-id",
+					"match": "\\[(\\d+)\\]"
 				}
 			]
 		}
-	},
-	"scopeName": "source.bangumiplan"
+	}
 }
