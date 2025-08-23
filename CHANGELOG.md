@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Changed
+
+- 统一使用一个正则表达式匹配条目
+
 ### Fixed
 
 - 修复带进度的条目格式高亮消失的问题
