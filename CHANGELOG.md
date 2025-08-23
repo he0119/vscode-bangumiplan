@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复带进度的条目格式高亮消失的问题
+
 ## [0.1.4] - 2025-08-23
 
 ### Fixed

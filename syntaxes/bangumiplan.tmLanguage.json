@@ -147,6 +147,24 @@
 					}
 				},
 				{
+					"name": "meta.entry.with-progress",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*(√+)\\s*$",
+					"captures": {
+						"1": {
+							"name": "punctuation.whitespace"
+						},
+						"2": {
+							"name": "constant.numeric"
+						},
+						"3": {
+							"name": "entity.name"
+						},
+						"4": {
+							"name": "markup.inserted"
+						}
+					}
+				},
+				{
 					"name": "meta.entry.no-id-with-progress-and-note",
 					"match": "^(\\s{8})(.+?)\\s*(√+)\\s*\\(([^)]+)\\)\\s*$",
 					"captures": {
@@ -180,8 +198,8 @@
 					}
 				},
 				{
-					"name": "meta.entry.with-progress",
-					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)\\s*(√+)?\\s*$",
+					"name": "meta.entry.with-id",
+					"match": "^(\\s{8})\\[(\\d+)\\](.+?)\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
@@ -191,23 +209,17 @@
 						},
 						"3": {
 							"name": "entity.name"
-						},
-						"4": {
-							"name": "markup.inserted"
 						}
 					}
 				},
 				{
 					"name": "meta.entry",
-					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)\\s*$",
+					"match": "^(\\s{8})(.+?)\\s*$",
 					"captures": {
 						"1": {
 							"name": "punctuation.whitespace"
 						},
 						"2": {
-							"name": "constant.numeric"
-						},
-						"3": {
 							"name": "entity.name"
 						}
 					}
