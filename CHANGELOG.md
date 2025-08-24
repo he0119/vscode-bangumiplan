@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Changed
+
+- 不使用可变长度 lookbehind
+
 ## [0.2.0] - 2025-08-23
 
 ### Changed

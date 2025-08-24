@@ -37,19 +37,19 @@
 			"patterns": [
 				{
 					"name": "meta.entry",
-					"match": "^(\\s{8})(?:\\[(\\d+)\\])?(.+?)(?:\\s*(√+))?(?:\\s*<([^>]+)>)?(?:(?:(?<=√+)|(?<=<[^>]+>))\\s*\\(([^)]+)\\))?\\s*$",
+					"match": "^\\s{8}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(√+)(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([^>]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$",
 					"captures": {
 						"1": {
-							"name": "punctuation.whitespace"
-						},
-						"2": {
 							"name": "constant.numeric.bgm-id"
 						},
-						"3": {
+						"2": {
 							"name": "entity.name.title"
 						},
-						"4": {
+						"3": {
 							"name": "constant.character.progress"
+						},
+						"4": {
+							"name": "comment.note"
 						},
 						"5": {
 							"name": "constant.other.date"
@@ -58,30 +58,6 @@
 							"name": "comment.note"
 						}
 					}
-				}
-			]
-		},
-		"meta": {
-			"patterns": [
-				{
-					"name": "constant.character.progress",
-					"match": "√+"
-				},
-				{
-					"name": "constant.other.date",
-					"begin": "<",
-					"end": ">",
-					"patterns": []
-				},
-				{
-					"name": "comment.note",
-					"begin": "\\(",
-					"end": "\\)",
-					"patterns": []
-				},
-				{
-					"name": "constant.numeric.bgm-id",
-					"match": "\\[(\\d+)\\]"
 				}
 			]
 		}

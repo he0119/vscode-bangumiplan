@@ -46,14 +46,24 @@ class hoverProvider {
 
     // 与 tmLanguage.json 一致的正则
     const entryRegex =
-      /^( {8})(?:\[(\d+)\])?(.+?)(?:\s*(√+))?(?:\s*<([^>]+)>)?(?:(?:(?<=√+)|(?<=<[^>]+>))\s*\(([^)]+)\))?\s*$/;
+      /^ {8}(?:\[(\d+)\])?(.+?)(?:\s*(√+)(?:\s*\(([^)]+)\))?)?(?:\s*<([^>]+)>(?:\s*\(([^)]+)\))?)?\s*$/;
     const m = line.match(entryRegex);
     if (!m) return null;
 
-    const [, indent, bgmId, titleRaw, marks, date, note] = m;
+    // 捕获组对应：
+    // 1: bgmId
+    // 2: 标题
+    // 3: 进度 marks
+    // 4: 备注 (跟在进度后)
+    // 5: 日期
+    // 6: 备注 (跟在日期后)
+    const [, bgmId, titleRaw, marks, noteAfterMarks, date, noteAfterDate] = m;
     const title = titleRaw?.trim() || "";
+    const note = noteAfterMarks || noteAfterDate || "";
 
-    // 工具函数：创建 Range + 匹配判定
+    const indentLength = 8;
+
+    // 工具函数：创建 Range + 判断光标是否在其中
     const makeRange = (start, text) => {
       const end = start + text.length;
       const inRange = position.character >= start && position.character <= end;
@@ -63,22 +73,19 @@ class hoverProvider {
       };
     };
 
-    // 重新计算各部分真实列位置，考虑标题/进度/日期/说明之间未捕获的空格
-    // 初始光标位置：缩进 + 可选 ID + 原始标题（不 trim, 因为正则第三组是最小匹配并包含尾部空格）
+    // 重新计算各部分真实列位置
     const idPart = bgmId ? `[${bgmId}]` : "";
-    const rawTitle = titleRaw || ""; // 保留原样（含尾部空格）以便定位后续片段
-    let cursor = indent.length + idPart.length + rawTitle.length; // 指向标题后第一个字符
+    const rawTitle = titleRaw || ""; // 保留原样（含尾空格）
+    let cursor = indentLength + idPart.length + rawTitle.length;
 
-    // 标题范围：用 trim 后的标题显示，但开始位置需要跳过标题前的空格（第三组最前不会有空格）
-    // 处理：找到 rawTitle 中 trim 后的起始与结束偏移
+    // 标题范围：用 trim 后的标题显示，但起始位置需要考虑原始空格
     const leadingSpacesInTitle = rawTitle.length - rawTitle.trimStart().length;
-    const trailingSpacesInTitle = rawTitle.length - rawTitle.trimEnd().length;
     const titleVisibleStart =
-      indent.length + idPart.length + leadingSpacesInTitle;
+      indentLength + idPart.length + leadingSpacesInTitle;
     const titleVisibleText = rawTitle.trim();
     const titleRange = makeRange(titleVisibleStart, titleVisibleText);
 
-    // 从标题结尾（含尾部空格）开始解析 marks/date/note，每次用剩余子串的前缀正则 ^\s*...
+    // 辅助函数：从当前位置开始匹配 token
     const sliceFrom = (pos) => line.slice(pos);
     const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const locateSegment = (tokenText) => {
@@ -98,11 +105,11 @@ class hoverProvider {
     // 日期
     const dateToken = date ? `<${date}>` : null;
     const dateRange = dateToken ? locateSegment(dateToken) : null;
-    // 说明
+    // 备注
     const noteToken = note ? `(${note})` : null;
     const noteRange = noteToken ? locateSegment(noteToken) : null;
 
-    // 抽取 hover 内容构建函数
+    // Hover 内容构建函数
     const buildHover = (type, data) => {
       const md = new vscode.MarkdownString();
       switch (type) {
