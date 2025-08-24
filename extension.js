@@ -44,9 +44,12 @@ class hoverProvider {
   provideHover(document, position) {
     const line = document.lineAt(position).text;
 
+    const indentLength = 8;
+
     // 与 tmLanguage.json 一致的正则
-    const entryRegex =
-      /^ {8}(?:\[(\d+)\])?(.+?)(?:\s*(√+)(?:\s*\(([^)]+)\))?)?(?:\s*<([^>]+)>(?:\s*\(([^)]+)\))?)?\s*$/;
+    const entryRegex = new RegExp(
+      `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(√+)(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([^>]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
+    );
     const m = line.match(entryRegex);
     if (!m) return null;
 
@@ -60,8 +63,6 @@ class hoverProvider {
     const [, bgmId, titleRaw, marks, noteAfterMarks, date, noteAfterDate] = m;
     const title = titleRaw?.trim() || "";
     const note = noteAfterMarks || noteAfterDate || "";
-
-    const indentLength = 8;
 
     // 工具函数：创建 Range + 判断光标是否在其中
     const makeRange = (start, text) => {
