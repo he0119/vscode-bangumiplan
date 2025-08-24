@@ -19,6 +19,9 @@
     "bangumi"
   ],
   "main": "./extension.js",
+  "scripts": {
+    "test": "vscode-test"
+  },
   "contributes": {
     "languages": [
       {
@@ -40,5 +43,11 @@
         "path": "./syntaxes/bangumiplan.tmLanguage.json"
       }
     ]
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.3.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
   }
 }
