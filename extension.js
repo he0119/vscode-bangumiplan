@@ -1,6 +1,42 @@
 const vscode = require("vscode");
 
 /**
+ * 解析条目行的函数
+ * @param {string} line - 要解析的行
+ * @returns {object|null} - 解析结果对象或null
+ */
+function parseEntryLine(line) {
+  const indentLength = 8;
+
+  // 与 tmLanguage.json 一致的正则
+  const entryRegex = new RegExp(
+    `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(√+)(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([^>]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
+  );
+  const m = line.match(entryRegex);
+  if (!m) return null;
+
+  // 捕获组对应：
+  // 1: bgmId
+  // 2: 标题
+  // 3: 进度 marks
+  // 4: 备注 (跟在进度后)
+  // 5: 日期
+  // 6: 备注 (跟在日期后)
+  const [, bgmId, titleRaw, marks, noteAfterMarks, date, noteAfterDate] = m;
+  const title = titleRaw?.trim() || "";
+  const note = noteAfterMarks || noteAfterDate || "";
+
+  return {
+    bgmId: bgmId || undefined,
+    title: title,
+    rawTitle: titleRaw || "",
+    marks: marks || undefined,
+    date: date || undefined,
+    note: note,
+  };
+}
+
+/**
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
@@ -44,25 +80,13 @@ class hoverProvider {
   provideHover(document, position) {
     const line = document.lineAt(position).text;
 
+    // 使用新的 parseEntryLine 函数
+    const parsed = parseEntryLine(line);
+    if (!parsed) return null;
+
+    const { bgmId, title, rawTitle, marks, date, note } = parsed;
+
     const indentLength = 8;
-
-    // 与 tmLanguage.json 一致的正则
-    const entryRegex = new RegExp(
-      `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(√+)(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([^>]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
-    );
-    const m = line.match(entryRegex);
-    if (!m) return null;
-
-    // 捕获组对应：
-    // 1: bgmId
-    // 2: 标题
-    // 3: 进度 marks
-    // 4: 备注 (跟在进度后)
-    // 5: 日期
-    // 6: 备注 (跟在日期后)
-    const [, bgmId, titleRaw, marks, noteAfterMarks, date, noteAfterDate] = m;
-    const title = titleRaw?.trim() || "";
-    const note = noteAfterMarks || noteAfterDate || "";
 
     // 工具函数：创建 Range + 判断光标是否在其中
     const makeRange = (start, text) => {
@@ -76,7 +100,6 @@ class hoverProvider {
 
     // 重新计算各部分真实列位置
     const idPart = bgmId ? `[${bgmId}]` : "";
-    const rawTitle = titleRaw || ""; // 保留原样（含尾空格）
     let cursor = indentLength + idPart.length + rawTitle.length;
 
     // 标题范围：用 trim 后的标题显示，但起始位置需要考虑原始空格
@@ -182,4 +205,4 @@ class hoverProvider {
 
 function deactivate() {}
 
-module.exports = { activate, deactivate };
+module.exports = { activate, deactivate, parseEntryLine };
