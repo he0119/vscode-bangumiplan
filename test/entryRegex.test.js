@@ -336,4 +336,203 @@ describe("parseEntryLine", () => {
       );
     });
   });
+
+  // 多种进度标记测试
+  it("进度标记 - 复选框符号☑", () => {
+    const input = "        [123456]作品名 ☑☑☑";
+    const expected = {
+      bgmId: "123456",
+      title: "作品名",
+      rawTitle: "作品名",
+      marks: "☑☑☑",
+      date: undefined,
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 绿色勾号✅", () => {
+    const input = "        作品名 ✅✅✅✅";
+    const expected = {
+      bgmId: undefined,
+      title: "作品名",
+      rawTitle: "作品名",
+      marks: "✅✅✅✅",
+      date: undefined,
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 勾号符号✓", () => {
+    const input = "        [789012]测试作品 ✓✓✓✓✓ (使用勾号标记)";
+    const expected = {
+      bgmId: "789012",
+      title: "测试作品",
+      rawTitle: "测试作品",
+      marks: "✓✓✓✓✓",
+      date: undefined,
+      note: "使用勾号标记",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 复选标记✔", () => {
+    const input = "        另一个作品 ✔✔✔";
+    const expected = {
+      bgmId: undefined,
+      title: "另一个作品",
+      rawTitle: "另一个作品",
+      marks: "✔✔✔",
+      date: undefined,
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 特殊勾号🗸", () => {
+    const input = "        [345678]特殊符号测试 🗸🗸🗸🗸🗸🗸";
+    const expected = {
+      bgmId: "345678",
+      title: "特殊符号测试",
+      rawTitle: "特殊符号测试",
+      marks: "🗸🗸🗸🗸🗸🗸",
+      date: undefined,
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 混合符号", () => {
+    const input = "        混合进度标记 √☑✅✓✔🗸";
+    const expected = {
+      bgmId: undefined,
+      title: "混合进度标记",
+      rawTitle: "混合进度标记",
+      marks: "√☑✅✓✔🗸",
+      date: undefined,
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 复选框加日期", () => {
+    const input = "        [111222]复选框测试 ☑☑☑☑<2024-12-25>";
+    const expected = {
+      bgmId: "111222",
+      title: "复选框测试",
+      rawTitle: "复选框测试",
+      marks: "☑☑☑☑",
+      date: "2024-12-25",
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 绿色勾号加说明和日期", () => {
+    const input = "        绿勾测试 ✅✅✅ (很棒的作品)<2024-11-15>";
+    const expected = {
+      bgmId: undefined,
+      title: "绿勾测试",
+      rawTitle: "绿勾测试",
+      marks: "✅✅✅",
+      date: "2024-11-15",
+      note: "很棒的作品",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("进度标记 - 长标题带多种符号", () => {
+    const input = "        [999888]这是一个很长的标题名称用来测试多种进度符号的解析 ✓✓✓✔✔☑✅√🗸 (综合测试用例)";
+    const expected = {
+      bgmId: "999888",
+      title: "这是一个很长的标题名称用来测试多种进度符号的解析",
+      rawTitle: "这是一个很长的标题名称用来测试多种进度符号的解析",
+      marks: "✓✓✓✔✔☑✅√🗸",
+      date: undefined,
+      note: "综合测试用例",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
 });
