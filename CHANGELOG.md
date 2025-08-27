@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Added
+
+- 支持多种进度标记
+
 ### Changed
 
 - 不使用可变长度 lookbehind
