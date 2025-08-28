@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.2.1] - 2025-08-28
+
 ### Added
 
 - 支持多种进度标记
@@ -71,7 +73,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Initial release
 
-[Unreleased]: https://github.com/he0119/vscode-bangumiplan/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/he0119/vscode-bangumiplan/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/he0119/vscode-bangumiplan/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/he0119/vscode-bangumiplan/compare/v0.1.3...v0.1.4
