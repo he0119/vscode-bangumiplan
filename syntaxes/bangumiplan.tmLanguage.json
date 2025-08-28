@@ -46,16 +46,16 @@
 							"name": "entity.name.title"
 						},
 						"3": {
-							"name": "constant.character.progress"
+							"name": "string.progress"
 						},
 						"4": {
-							"name": "constant.character.progress-detail"
+							"name": "string.progress-detail"
 						},
 						"5": {
 							"name": "comment.note"
 						},
 						"6": {
-							"name": "constant.other.date"
+							"name": "string.date"
 						},
 						"7": {
 							"name": "comment.note"
