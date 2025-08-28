@@ -37,7 +37,7 @@
 			"patterns": [
 				{
 					"name": "meta.entry",
-					"match": "^\\s{8}(?:\\[(\\d+)\\])?(.+?)(?:\\s*([√☑✅✓✔🗸]+)(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([^>]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$",
+					"match": "^\\s{8}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$",
 					"captures": {
 						"1": {
 							"name": "constant.numeric.bgm-id"
@@ -49,12 +49,15 @@
 							"name": "constant.character.progress"
 						},
 						"4": {
-							"name": "comment.note"
+							"name": "constant.character.progress-detail"
 						},
 						"5": {
-							"name": "constant.other.date"
+							"name": "comment.note"
 						},
 						"6": {
+							"name": "constant.other.date"
+						},
+						"7": {
 							"name": "comment.note"
 						}
 					}

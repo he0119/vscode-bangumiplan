@@ -535,4 +535,120 @@ describe("parseEntryLine", () => {
       );
     });
   });
+
+  // 新增测试：支持 [正在观看 进度详情] 格式
+  it("新格式 - 正在观看格式无说明", () => {
+    const input = "        [123456]作品名 [正在观看 第5集]";
+    const expected = {
+      bgmId: "123456",
+      title: "作品名",
+      rawTitle: "作品名",
+      marks: undefined,
+      progressDetail: "第5集",
+      date: undefined,
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("新格式 - 正在观看格式有说明", () => {
+    const input = "        [123456]作品名 [正在观看 第5集] (很不错的动画)";
+    const expected = {
+      bgmId: "123456",
+      title: "作品名",
+      rawTitle: "作品名",
+      marks: undefined,
+      progressDetail: "第5集",
+      date: undefined,
+      note: "很不错的动画",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("新格式 - 正在观看格式+完成日期", () => {
+    const input = "        [123456]作品名 [正在观看 第5集] <2024/12/15>";
+    const expected = {
+      bgmId: "123456",
+      title: "作品名",
+      rawTitle: "作品名",
+      marks: undefined,
+      progressDetail: "第5集",
+      date: "2024/12/15",
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("新格式 - 完成日期支持更多格式", () => {
+    const input = "        [123456]作品名 <2024-12-15 10:30>";
+    const expected = {
+      bgmId: "123456",
+      title: "作品名",
+      rawTitle: "作品名",
+      marks: undefined,
+      progressDetail: undefined,
+      date: "2024-12-15 10:30",
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
+
+  it("新格式 - 无ID正在观看格式", () => {
+    const input = "        作品名 [正在观看 第5集]";
+    const expected = {
+      bgmId: undefined,
+      title: "作品名",
+      rawTitle: "作品名",
+      marks: undefined,
+      progressDetail: "第5集",
+      date: undefined,
+      note: "",
+    };
+
+    const result = parseEntryLine(input);
+    assert.ok(result !== null, "parseEntryLine should not return null");
+    Object.keys(expected).forEach((key) => {
+      assert.strictEqual(
+        result[key],
+        expected[key],
+        `${key} should match expected value`
+      );
+    });
+  });
 });
