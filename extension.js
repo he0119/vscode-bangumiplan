@@ -10,28 +10,30 @@ function parseEntryLine(line) {
 
   // 与 tmLanguage.json 一致的正则
   const entryRegex = new RegExp(
-    `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*([√☑✅✓✔🗸]+)(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([^>]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
+    `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
   );
   const m = line.match(entryRegex);
   if (!m) return null;
 
   // 捕获组对应：
-  // 1: bgmId
-  // 2: 标题
-  // 3: 进度 marks
-  // 4: 备注 (跟在进度后)
-  // 5: 日期
-  // 6: 备注 (跟在日期后)
-  const [, bgmId, titleRaw, marks, noteAfterMarks, date, noteAfterDate] = m;
-  const title = titleRaw?.trim() || "";
-  const note = noteAfterMarks || noteAfterDate || "";
+  // 1: subject_id (bgmId)
+  // 2: 名称 (name)
+  // 3: 进度标记 (episode_progress)
+  // 4: 进度详情 (progress_detail)
+  // 5: 进度说明 (progress_description)
+  // 6: 完成时间 (completion_date)
+  // 7: 日期说明 (date_description)
+  const [, subjectId, nameRaw, episodeProgress, progressDetail, progressDescription, completionDate, dateDescription] = m;
+  const name = nameRaw?.trim() || "";
+  const note = progressDescription || dateDescription || "";
 
   return {
-    bgmId: bgmId || undefined,
-    title: title,
-    rawTitle: titleRaw || "",
-    marks: marks || undefined,
-    date: date || undefined,
+    bgmId: subjectId || undefined,
+    title: name,
+    rawTitle: nameRaw || "",
+    marks: episodeProgress || undefined,
+    progressDetail: progressDetail || undefined,
+    date: completionDate || undefined,
     note: note,
   };
 }
@@ -84,7 +86,7 @@ class hoverProvider {
     const parsed = parseEntryLine(line);
     if (!parsed) return null;
 
-    const { bgmId, title, rawTitle, marks, date, note } = parsed;
+    const { bgmId, title, rawTitle, marks, progressDetail, date, note } = parsed;
 
     const indentLength = 8;
 
@@ -124,8 +126,11 @@ class hoverProvider {
       return rangeObj;
     };
 
-    // 进度符号
+    // 进度符号或进度详情
     const marksRange = marks ? locateSegment(marks) : null;
+    const progressDetailToken = progressDetail ? `[正在观看 ${progressDetail}]` : null;
+    const progressDetailRange = progressDetailToken ? locateSegment(progressDetailToken) : null;
+
     // 日期
     const dateToken = date ? `<${date}>` : null;
     const dateRange = dateToken ? locateSegment(dateToken) : null;
@@ -144,8 +149,15 @@ class hoverProvider {
           md.appendMarkdown(`进度标记: \`${marks}\``);
           return md;
         }
+        case "progressDetail": {
+          const { progressDetail, title } = data;
+          md.appendMarkdown(`**观看状态**\n\n`);
+          md.appendMarkdown(`正在观看: **${progressDetail}**\n\n`);
+          md.appendMarkdown(`作品: **${title}**`);
+          return md;
+        }
         case "title": {
-          const { title, bgmId, marks, date, note } = data;
+          const { title, bgmId, marks, progressDetail, date, note } = data;
           md.appendMarkdown(`**${title}**\n\n`);
           if (bgmId)
             md.appendMarkdown(
@@ -154,6 +166,9 @@ class hoverProvider {
           if (marks) {
             md.appendMarkdown(`观看进度: **${marks.length}** 集\n\n`);
             md.appendMarkdown(`进度标记: \`${marks}\`\n\n`);
+          }
+          if (progressDetail) {
+            md.appendMarkdown(`观看状态: **正在观看 ${progressDetail}**\n\n`);
           }
           if (date) md.appendMarkdown(`完成日期: **${date}**\n\n`);
           if (note) md.appendMarkdown(`说明: *${note}*`);
@@ -181,9 +196,12 @@ class hoverProvider {
     if (marksRange?.inRange) {
       return new vscode.Hover(buildHover("marks", { marks }), marksRange.range);
     }
+    if (progressDetailRange?.inRange) {
+      return new vscode.Hover(buildHover("progressDetail", { progressDetail, title }), progressDetailRange.range);
+    }
     if (title && titleRange.inRange) {
       return new vscode.Hover(
-        buildHover("title", { title, bgmId, marks, date, note }),
+        buildHover("title", { title, bgmId, marks, progressDetail, date, note }),
         titleRange.range
       );
     }
