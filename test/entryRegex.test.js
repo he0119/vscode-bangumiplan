@@ -536,8 +536,8 @@ describe("parseEntryLine", () => {
     });
   });
 
-  // 新增测试：支持 [正在观看 进度详情] 格式
-  it("新格式 - 正在观看格式无说明", () => {
+  // 进度详情测试：支持 [正在观看 进度详情] 格式
+  it("进度详情 - 正在观看格式无说明", () => {
     const input = "        [123456]作品名 [正在观看 第5集]";
     const expected = {
       bgmId: "123456",
@@ -560,7 +560,7 @@ describe("parseEntryLine", () => {
     });
   });
 
-  it("新格式 - 正在观看格式有说明", () => {
+  it("进度详情 - 正在观看格式有说明", () => {
     const input = "        [123456]作品名 [正在观看 第5集] (很不错的动画)";
     const expected = {
       bgmId: "123456",
@@ -583,7 +583,7 @@ describe("parseEntryLine", () => {
     });
   });
 
-  it("新格式 - 正在观看格式+完成日期", () => {
+  it("进度详情 - 正在观看格式+完成日期", () => {
     const input = "        [123456]作品名 [正在观看 第5集] <2024/12/15>";
     const expected = {
       bgmId: "123456",
@@ -606,7 +606,7 @@ describe("parseEntryLine", () => {
     });
   });
 
-  it("新格式 - 完成日期支持更多格式", () => {
+  it("扩展日期格式 - 完成日期支持更多格式", () => {
     const input = "        [123456]作品名 <2024-12-15 10:30>";
     const expected = {
       bgmId: "123456",
@@ -629,7 +629,7 @@ describe("parseEntryLine", () => {
     });
   });
 
-  it("新格式 - 无ID正在观看格式", () => {
+  it("进度详情 - 无ID正在观看格式", () => {
     const input = "        作品名 [正在观看 第5集]";
     const expected = {
       bgmId: undefined,

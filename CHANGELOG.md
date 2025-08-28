@@ -9,7 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - 支持多种进度标记
-- 支持新的进度格式 `[正在观看 进度详情]`
+- 支持进度详情格式 `[正在观看 进度详情]`
 
 ### Changed
 
