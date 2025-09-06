@@ -23,7 +23,16 @@ function parseEntryLine(line) {
   // 5: 进度说明 (progress_description)
   // 6: 完成时间 (completion_date)
   // 7: 日期说明 (date_description)
-  const [, subjectId, nameRaw, episodeProgress, progressDetail, progressDescription, completionDate, dateDescription] = m;
+  const [
+    ,
+    subjectId,
+    nameRaw,
+    episodeProgress,
+    progressDetail,
+    progressDescription,
+    completionDate,
+    dateDescription,
+  ] = m;
   const name = nameRaw?.trim() || "";
   const note = progressDescription || dateDescription || "";
 
@@ -86,7 +95,8 @@ class hoverProvider {
     const parsed = parseEntryLine(line);
     if (!parsed) return null;
 
-    const { bgmId, title, rawTitle, marks, progressDetail, date, note } = parsed;
+    const { bgmId, title, rawTitle, marks, progressDetail, date, note } =
+      parsed;
 
     const indentLength = 8;
 
@@ -128,8 +138,12 @@ class hoverProvider {
 
     // 进度符号或进度详情
     const marksRange = marks ? locateSegment(marks) : null;
-    const progressDetailToken = progressDetail ? `[正在观看 ${progressDetail}]` : null;
-    const progressDetailRange = progressDetailToken ? locateSegment(progressDetailToken) : null;
+    const progressDetailToken = progressDetail
+      ? `[正在观看 ${progressDetail}]`
+      : null;
+    const progressDetailRange = progressDetailToken
+      ? locateSegment(progressDetailToken)
+      : null;
 
     // 日期
     const dateToken = date ? `<${date}>` : null;
@@ -197,11 +211,21 @@ class hoverProvider {
       return new vscode.Hover(buildHover("marks", { marks }), marksRange.range);
     }
     if (progressDetailRange?.inRange) {
-      return new vscode.Hover(buildHover("progressDetail", { progressDetail, title }), progressDetailRange.range);
+      return new vscode.Hover(
+        buildHover("progressDetail", { progressDetail, title }),
+        progressDetailRange.range
+      );
     }
     if (title && titleRange.inRange) {
       return new vscode.Hover(
-        buildHover("title", { title, bgmId, marks, progressDetail, date, note }),
+        buildHover("title", {
+          title,
+          bgmId,
+          marks,
+          progressDetail,
+          date,
+          note,
+        }),
         titleRange.range
       );
     }
@@ -221,6 +245,6 @@ class hoverProvider {
   }
 }
 
-function deactivate() { }
+function deactivate() {}
 
 module.exports = { activate, deactivate, parseEntryLine };
