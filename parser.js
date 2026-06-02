@@ -1,16 +1,14 @@
+const ENTRY_REGEX_SOURCE =
+  "^\\s{8}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$";
+const ENTRY_REGEX = new RegExp(ENTRY_REGEX_SOURCE);
+
 /**
  * 解析条目行的函数
  * @param {string} line - 要解析的行
  * @returns {object|null} - 解析结果对象或null
  */
 function parseEntryLine(line) {
-  const indentLength = 8;
-
-  // 与 tmLanguage.json 一致的正则
-  const entryRegex = new RegExp(
-    `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
-  );
-  const m = line.match(entryRegex);
+  const m = line.match(ENTRY_REGEX);
   if (!m) return null;
 
   // 捕获组对应：
@@ -40,7 +38,9 @@ function parseEntryLine(line) {
     rawTitle: nameRaw || "",
     marks: episodeProgress || undefined,
     progressDetail: progressDetail || undefined,
+    progressDescription: progressDescription || undefined,
     date: completionDate || undefined,
+    dateDescription: dateDescription || undefined,
     note: note,
   };
 }
@@ -67,8 +67,93 @@ function applyCurrentTimeToEntryLine(line, timestamp = formatBangumiPlanDateTime
   return line.slice(0, insertAt) + timestamp + line.slice(insertAt);
 }
 
+function locateEntrySegments(line) {
+  const parsed = parseEntryLine(line);
+  if (!parsed) return null;
+
+  const {
+    bgmId,
+    rawTitle,
+    marks,
+    progressDetail,
+    progressDescription,
+    date,
+    dateDescription,
+  } = parsed;
+  const indentLength = 8;
+  const idPart = bgmId ? `[${bgmId}]` : "";
+  let cursor = indentLength + idPart.length + rawTitle.length;
+
+  const createSegment = (start, text) => ({
+    start,
+    end: start + text.length,
+    text,
+  });
+
+  const leadingSpacesInTitle = rawTitle.length - rawTitle.trimStart().length;
+  const titleVisibleStart =
+    indentLength + idPart.length + leadingSpacesInTitle;
+  const titleVisibleText = rawTitle.trim();
+
+  const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const locateSegment = (tokenText) => {
+    const after = line.slice(cursor);
+    const re = new RegExp(`^(\\s*)${escapeRegex(tokenText)}`);
+    const mm = after.match(re);
+    if (!mm) return null;
+    const start = cursor + mm[1].length;
+    cursor = start + tokenText.length;
+    return createSegment(start, tokenText);
+  };
+
+  return {
+    parsed,
+    title: titleVisibleText
+      ? createSegment(titleVisibleStart, titleVisibleText)
+      : null,
+    marks: marks ? locateSegment(marks) : null,
+    progressDetail: progressDetail
+      ? locateSegment(`[正在观看 ${progressDetail}]`)
+      : null,
+    progressDescription: progressDescription
+      ? locateSegment(`(${progressDescription})`)
+      : null,
+    date: date ? locateSegment(`<${date}>`) : null,
+    dateDescription: dateDescription
+      ? locateSegment(`(${dateDescription})`)
+      : null,
+  };
+}
+
+function findBgmIdLinks(text) {
+  const links = [];
+  let lineStart = 0;
+
+  for (const line of text.split(/\r?\n/)) {
+    const parsed = parseEntryLine(line);
+    if (parsed?.bgmId) {
+      const token = `[${parsed.bgmId}]`;
+      const tokenStart = line.indexOf(token);
+      if (tokenStart !== -1) {
+        links.push({
+          id: parsed.bgmId,
+          start: lineStart + tokenStart,
+          end: lineStart + tokenStart + token.length,
+        });
+      }
+    }
+
+    lineStart += line.length + 1;
+  }
+
+  return links;
+}
+
 module.exports = {
+  ENTRY_REGEX_SOURCE,
   parseEntryLine,
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,
+  locateEntrySegments,
+  findBgmIdLinks,
 };
