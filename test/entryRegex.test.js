@@ -4,6 +4,7 @@ const {
   parseEntryLine,
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,
+  locateEntrySegments,
 } = require("../extension.js");
 
 // 使用 Mocha 的 describe/it 结构执行测试用例
@@ -703,5 +704,30 @@ describe("当前时间代码操作辅助函数", () => {
     const result = applyCurrentTimeToEntryLine("动画:");
 
     assert.strictEqual(result, null);
+  });
+});
+
+describe("条目片段定位辅助函数", () => {
+  it("能定位进度说明之后的日期和日期说明", () => {
+    const input =
+      "        [222333]全功能测试 ✓✓✓✓✓ (优秀作品)<2024-11-20>(日期说明)";
+    const result = locateEntrySegments(input);
+
+    assert.ok(result !== null, "locateEntrySegments should not return null");
+    assert.deepStrictEqual(result.progressDescription, {
+      start: input.indexOf("(优秀作品)"),
+      end: input.indexOf("(优秀作品)") + "(优秀作品)".length,
+      text: "(优秀作品)",
+    });
+    assert.deepStrictEqual(result.date, {
+      start: input.indexOf("<2024-11-20>"),
+      end: input.indexOf("<2024-11-20>") + "<2024-11-20>".length,
+      text: "<2024-11-20>",
+    });
+    assert.deepStrictEqual(result.dateDescription, {
+      start: input.indexOf("(日期说明)"),
+      end: input.indexOf("(日期说明)") + "(日期说明)".length,
+      text: "(日期说明)",
+    });
   });
 });
