@@ -1,5 +1,9 @@
 const vscode = require("vscode");
 
+const INSERT_CURRENT_TIME_ACTION_KIND = vscode.CodeActionKind.Refactor.append(
+  "insertCurrentTime"
+);
+
 /**
  * 解析条目行的函数
  * @param {string} line - 要解析的行
@@ -47,6 +51,28 @@ function parseEntryLine(line) {
   };
 }
 
+function formatBangumiPlanDateTime(date = new Date()) {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `<${year}/${month}/${day} ${hours}:${minutes}>`;
+}
+
+function applyCurrentTimeToEntryLine(line, timestamp = formatBangumiPlanDateTime()) {
+  if (!parseEntryLine(line)) return null;
+
+  const existingDateRegex = /<[\d/\-:\s]+>/;
+  if (existingDateRegex.test(line)) {
+    return line.replace(existingDateRegex, timestamp);
+  }
+
+  const insertAt = line.trimEnd().length;
+  return line.slice(0, insertAt) + timestamp + line.slice(insertAt);
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -61,6 +87,13 @@ function activate(context) {
     vscode.languages.registerHoverProvider(
       { language: "bangumiplan" },
       new hoverProvider()
+    ),
+    vscode.languages.registerCodeActionsProvider(
+      { language: "bangumiplan" },
+      new InsertCurrentTimeCodeActionProvider(),
+      {
+        providedCodeActionKinds: [INSERT_CURRENT_TIME_ACTION_KIND],
+      }
     )
   );
 }
@@ -245,6 +278,31 @@ class hoverProvider {
   }
 }
 
+class InsertCurrentTimeCodeActionProvider {
+  provideCodeActions(document, range) {
+    const line = document.lineAt(range.start.line);
+    const newText = applyCurrentTimeToEntryLine(line.text);
+    if (newText === null) return [];
+
+    const action = new vscode.CodeAction(
+      parseEntryLine(line.text)?.date ? "更新条目当前时间" : "给条目添加当前时间",
+      INSERT_CURRENT_TIME_ACTION_KIND
+    );
+    const edit = new vscode.WorkspaceEdit();
+
+    edit.replace(document.uri, line.range, newText);
+    action.edit = edit;
+
+    return [action];
+  }
+}
+
 function deactivate() {}
 
-module.exports = { activate, deactivate, parseEntryLine };
+module.exports = {
+  activate,
+  deactivate,
+  parseEntryLine,
+  formatBangumiPlanDateTime,
+  applyCurrentTimeToEntryLine,
+};
