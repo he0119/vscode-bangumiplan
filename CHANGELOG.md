@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Changed
+
+- 将条目解析与当前时间辅助逻辑拆分到独立 parser 模块，方便脱离 VS Code 宿主测试。
+
 ### Added
 
 - 添加给条目追加或更新当前完成时间的代码操作。
