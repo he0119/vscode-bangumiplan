@@ -1,6 +1,10 @@
 // 使用 VS Code 扩展标准测试
 const assert = require("assert");
-const { parseEntryLine } = require("../extension.js");
+const {
+  parseEntryLine,
+  formatBangumiPlanDateTime,
+  applyCurrentTimeToEntryLine,
+} = require("../extension.js");
 
 // 使用 Mocha 的 describe/it 结构执行测试用例
 describe("parseEntryLine", () => {
@@ -651,5 +655,53 @@ describe("parseEntryLine", () => {
         `${key} should match expected value`
       );
     });
+  });
+});
+
+describe("当前时间代码操作辅助函数", () => {
+  it("格式化当前时间", () => {
+    const result = formatBangumiPlanDateTime(new Date(2026, 5, 2, 20, 3));
+
+    assert.strictEqual(result, "<2026/6/2 20:03>");
+  });
+
+  it("给无日期条目添加当前时间", () => {
+    const input = "        [123456]作品名 √√√";
+    const result = applyCurrentTimeToEntryLine(input, "<2026/6/2 20:03>");
+
+    assert.strictEqual(result, "        [123456]作品名 √√√<2026/6/2 20:03>");
+  });
+
+  it("给带进度说明的条目添加当前时间", () => {
+    const input = "        [123456]作品名 √√√ (很好看)";
+    const result = applyCurrentTimeToEntryLine(input, "<2026/6/2 20:03>");
+
+    assert.strictEqual(
+      result,
+      "        [123456]作品名 √√√ (很好看)<2026/6/2 20:03>"
+    );
+  });
+
+  it("给正在观看条目添加当前时间", () => {
+    const input = "        [123456]作品名 [正在观看 第5集]";
+    const result = applyCurrentTimeToEntryLine(input, "<2026/6/2 20:03>");
+
+    assert.strictEqual(
+      result,
+      "        [123456]作品名 [正在观看 第5集]<2026/6/2 20:03>"
+    );
+  });
+
+  it("更新已有日期", () => {
+    const input = "        [123456]作品名<2024-12-15>(经典作品)";
+    const result = applyCurrentTimeToEntryLine(input, "<2026/6/2 20:03>");
+
+    assert.strictEqual(result, "        [123456]作品名<2026/6/2 20:03>(经典作品)");
+  });
+
+  it("忽略非条目行", () => {
+    const result = applyCurrentTimeToEntryLine("动画:");
+
+    assert.strictEqual(result, null);
   });
 });
