@@ -656,6 +656,17 @@ describe("parseEntryLine", () => {
       );
     });
   });
+
+  it("拒绝 Tab 缩进的条目", () => {
+    const input = "\t[123456]作品名 √√√";
+
+    assert.strictEqual(parseEntryLine(input), null);
+  });
+
+  it("拒绝非 8 空格缩进的条目", () => {
+    assert.strictEqual(parseEntryLine("    [123456]作品名 √√√"), null);
+    assert.strictEqual(parseEntryLine("      [123456]作品名 √√√"), null);
+  });
 });
 
 describe("当前时间代码操作辅助函数", () => {

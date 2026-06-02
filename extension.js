@@ -14,7 +14,7 @@ function parseEntryLine(line) {
 
   // 与 tmLanguage.json 一致的正则
   const entryRegex = new RegExp(
-    `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
+    `^[ ]{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
   );
   const m = line.match(entryRegex);
   if (!m) return null;
