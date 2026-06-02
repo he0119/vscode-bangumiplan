@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复带进度说明的组合条目中日期和日期说明无法正确触发悬浮提示的问题。
+
 ### Added
 
 - 添加给条目追加或更新当前完成时间的代码操作。
