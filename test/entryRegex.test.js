@@ -9,7 +9,7 @@ const {
   applyCurrentTimeToEntryLine,
   locateEntrySegments,
   findBgmIdLinks,
-} = require("../extension.js");
+} = require("../parser.js");
 
 describe("entry regex sync", () => {
   it("extension.js 与 tmLanguage.json 使用相同条目正则", () => {

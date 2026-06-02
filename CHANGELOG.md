@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Changed
+
+- 将条目解析与当前时间辅助逻辑拆分到独立 parser 模块，方便脱离 VS Code 宿主测试。
+
 ### Fixed
 
 - 修复带进度说明的组合条目中日期和日期说明无法正确触发悬浮提示的问题。
