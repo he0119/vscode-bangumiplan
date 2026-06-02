@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Changed
+
+- 更新协作指南中的 TextMate scope 说明，使其与当前语法定义保持一致。
+
 ### Added
 
 - 添加给条目追加或更新当前完成时间的代码操作。
