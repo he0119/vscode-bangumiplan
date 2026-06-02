@@ -96,8 +96,8 @@ context.subscriptions.push(
 
 - `constant.numeric.bgm-id`：BGM ID，黄色下划线。
 - `entity.name.title`：作品标题。
-- `constant.character.progress`：进度标记，绿色加粗。
-- `constant.other.date`：日期，橙色斜体。
+- `string.progress`：进度标记，绿色加粗。
+- `string.date`：日期，橙色斜体。
 - `comment.note`：说明或备注，灰色。
 
 ### Parser 导出模式
