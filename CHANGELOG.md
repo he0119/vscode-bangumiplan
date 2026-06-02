@@ -8,6 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
+- 更新协作指南中的 TextMate scope 说明，使其与当前语法定义保持一致。
 - 将条目解析与当前时间辅助逻辑拆分到独立 parser 模块，方便脱离 VS Code 宿主测试。
 
 ### Fixed
