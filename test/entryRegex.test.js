@@ -1,10 +1,32 @@
 // 使用 VS Code 扩展标准测试
 const assert = require("assert");
+const fs = require("fs");
+const path = require("path");
 const {
+  ENTRY_REGEX_SOURCE,
   parseEntryLine,
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,
-} = require("../extension.js");
+  locateEntrySegments,
+  findBgmIdLinks,
+} = require("../parser.js");
+
+describe("entry regex sync", () => {
+  it("extension.js 与 tmLanguage.json 使用相同条目正则", () => {
+    const grammarPath = path.join(
+      __dirname,
+      "..",
+      "syntaxes",
+      "bangumiplan.tmLanguage.json"
+    );
+    const grammar = JSON.parse(fs.readFileSync(grammarPath, "utf8"));
+    const grammarEntryRegex =
+      grammar.repository.entry.patterns.find((pattern) => pattern.name === "meta.entry")
+        ?.match;
+
+    assert.strictEqual(grammarEntryRegex, ENTRY_REGEX_SOURCE);
+  });
+});
 
 // 使用 Mocha 的 describe/it 结构执行测试用例
 describe("parseEntryLine", () => {
@@ -714,5 +736,52 @@ describe("当前时间代码操作辅助函数", () => {
     const result = applyCurrentTimeToEntryLine("动画:");
 
     assert.strictEqual(result, null);
+  });
+});
+
+describe("条目片段定位辅助函数", () => {
+  it("能定位进度说明之后的日期和日期说明", () => {
+    const input =
+      "        [222333]全功能测试 ✓✓✓✓✓ (优秀作品)<2024-11-20>(日期说明)";
+    const result = locateEntrySegments(input);
+
+    assert.ok(result !== null, "locateEntrySegments should not return null");
+    assert.deepStrictEqual(result.progressDescription, {
+      start: input.indexOf("(优秀作品)"),
+      end: input.indexOf("(优秀作品)") + "(优秀作品)".length,
+      text: "(优秀作品)",
+    });
+    assert.deepStrictEqual(result.date, {
+      start: input.indexOf("<2024-11-20>"),
+      end: input.indexOf("<2024-11-20>") + "<2024-11-20>".length,
+      text: "<2024-11-20>",
+    });
+    assert.deepStrictEqual(result.dateDescription, {
+      start: input.indexOf("(日期说明)"),
+      end: input.indexOf("(日期说明)") + "(日期说明)".length,
+      text: "(日期说明)",
+    });
+  });
+});
+
+describe("BGM ID 链接辅助函数", () => {
+  it("只链接条目开头的 BGM ID", () => {
+    const input = [
+      "正在看:",
+      "    动画:",
+      "        [123456]作品名 [789]标题一部分 (说明[111])",
+      "        无ID作品 [222]标题一部分",
+      "备注 [333]",
+    ].join("\n");
+
+    const result = findBgmIdLinks(input);
+
+    assert.deepStrictEqual(result, [
+      {
+        id: "123456",
+        start: input.indexOf("[123456]"),
+        end: input.indexOf("[123456]") + "[123456]".length,
+      },
+    ]);
   });
 });
