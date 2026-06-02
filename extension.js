@@ -3,6 +3,9 @@ const vscode = require("vscode");
 const INSERT_CURRENT_TIME_ACTION_KIND = vscode.CodeActionKind.Refactor.append(
   "insertCurrentTime"
 );
+const ENTRY_REGEX_SOURCE =
+  "^\\s{8}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$";
+const ENTRY_REGEX = new RegExp(ENTRY_REGEX_SOURCE);
 
 /**
  * 解析条目行的函数
@@ -10,13 +13,7 @@ const INSERT_CURRENT_TIME_ACTION_KIND = vscode.CodeActionKind.Refactor.append(
  * @returns {object|null} - 解析结果对象或null
  */
 function parseEntryLine(line) {
-  const indentLength = 8;
-
-  // 与 tmLanguage.json 一致的正则
-  const entryRegex = new RegExp(
-    `^\\s{${indentLength}}(?:\\[(\\d+)\\])?(.+?)(?:\\s*(?:([√☑✅✓✔🗸]+)|\\[正在观看\\s+([^\\]]+)\\])(?:\\s*\\(([^)]+)\\))?)?(?:\\s*<([\\d/\\-:\\s]+)>(?:\\s*\\(([^)]+)\\))?)?\\s*$`
-  );
-  const m = line.match(entryRegex);
+  const m = line.match(ENTRY_REGEX);
   if (!m) return null;
 
   // 捕获组对应：
@@ -350,6 +347,7 @@ function deactivate() {}
 module.exports = {
   activate,
   deactivate,
+  ENTRY_REGEX_SOURCE,
   parseEntryLine,
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,

@@ -1,12 +1,32 @@
 // 使用 VS Code 扩展标准测试
 const assert = require("assert");
+const fs = require("fs");
+const path = require("path");
 const {
+  ENTRY_REGEX_SOURCE,
   parseEntryLine,
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,
   locateEntrySegments,
   findBgmIdLinks,
 } = require("../extension.js");
+
+describe("entry regex sync", () => {
+  it("extension.js 与 tmLanguage.json 使用相同条目正则", () => {
+    const grammarPath = path.join(
+      __dirname,
+      "..",
+      "syntaxes",
+      "bangumiplan.tmLanguage.json"
+    );
+    const grammar = JSON.parse(fs.readFileSync(grammarPath, "utf8"));
+    const grammarEntryRegex =
+      grammar.repository.entry.patterns.find((pattern) => pattern.name === "meta.entry")
+        ?.match;
+
+    assert.strictEqual(grammarEntryRegex, ENTRY_REGEX_SOURCE);
+  });
+});
 
 // 使用 Mocha 的 describe/it 结构执行测试用例
 describe("parseEntryLine", () => {
