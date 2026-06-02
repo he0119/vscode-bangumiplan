@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Fixed
+
+- 限制分类和条目缩进只接受空格，使解析和高亮行为符合 `.bp` 文件格式约定。
+
 ### Added
 
 - 添加给条目追加或更新当前完成时间的代码操作。
