@@ -8,6 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
+- 添加条目解析正则与 TextMate 语法正则的同步校验测试。
 - 添加给条目追加或更新当前完成时间的代码操作。
 
 ## [0.2.1] - 2025-08-28
