@@ -9,9 +9,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - 更新协作指南中的 TextMate scope 说明，使其与当前语法定义保持一致。
+- 将条目解析与当前时间辅助逻辑拆分到独立 parser 模块，方便脱离 VS Code 宿主测试。
+
+### Fixed
+
+- 修复带进度说明的组合条目中日期和日期说明无法正确触发悬浮提示的问题。
+- 限制 BGM 链接只匹配条目开头的 BGM ID，避免标题或备注中的方括号数字被误链接。
 
 ### Added
 
+- 添加条目解析正则与 TextMate 语法正则的同步校验测试。
 - 添加给条目追加或更新当前完成时间的代码操作。
 
 ## [0.2.1] - 2025-08-28
