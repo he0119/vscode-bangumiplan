@@ -4,7 +4,7 @@ const {
   parseEntryLine,
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,
-} = require("../extension.js");
+} = require("../parser.js");
 
 // 使用 Mocha 的 describe/it 结构执行测试用例
 describe("parseEntryLine", () => {
