@@ -133,6 +133,30 @@ function locateEntrySegments(line) {
   };
 }
 
+function findBgmIdLinks(text) {
+  const links = [];
+  let lineStart = 0;
+
+  for (const line of text.split(/\r?\n/)) {
+    const parsed = parseEntryLine(line);
+    if (parsed?.bgmId) {
+      const token = `[${parsed.bgmId}]`;
+      const tokenStart = line.indexOf(token);
+      if (tokenStart !== -1) {
+        links.push({
+          id: parsed.bgmId,
+          start: lineStart + tokenStart,
+          end: lineStart + tokenStart + token.length,
+        });
+      }
+    }
+
+    lineStart += line.length + 1;
+  }
+
+  return links;
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -160,23 +184,18 @@ function activate(context) {
 
 class BgmLinkProvider {
   provideDocumentLinks(document) {
-    const links = [];
-    const regex = /\[(\d+)\]/g;
-    let match;
-    while ((match = regex.exec(document.getText())) !== null) {
-      const id = match[1];
+    return findBgmIdLinks(document.getText()).map(({ id, start, end }) => {
       const range = new vscode.Range(
-        document.positionAt(match.index),
-        document.positionAt(match.index + match[0].length)
+        document.positionAt(start),
+        document.positionAt(end)
       );
       const link = new vscode.DocumentLink(
         range,
         vscode.Uri.parse(`https://bgm.tv/subject/${id}`)
       );
       link.tooltip = `跳转到 BGM ID: ${id}`;
-      links.push(link);
-    }
-    return links;
+      return link;
+    });
   }
 }
 
@@ -335,4 +354,5 @@ module.exports = {
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,
   locateEntrySegments,
+  findBgmIdLinks,
 };

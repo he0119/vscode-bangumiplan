@@ -9,6 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 
 - 修复带进度说明的组合条目中日期和日期说明无法正确触发悬浮提示的问题。
+- 限制 BGM 链接只匹配条目开头的 BGM ID，避免标题或备注中的方括号数字被误链接。
 
 ### Added
 
