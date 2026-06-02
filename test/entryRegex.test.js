@@ -4,6 +4,7 @@ const {
   parseEntryLine,
   formatBangumiPlanDateTime,
   applyCurrentTimeToEntryLine,
+  findBgmIdLinks,
 } = require("../extension.js");
 
 // 使用 Mocha 的 describe/it 结构执行测试用例
@@ -703,5 +704,27 @@ describe("当前时间代码操作辅助函数", () => {
     const result = applyCurrentTimeToEntryLine("动画:");
 
     assert.strictEqual(result, null);
+  });
+});
+
+describe("BGM ID 链接辅助函数", () => {
+  it("只链接条目开头的 BGM ID", () => {
+    const input = [
+      "正在看:",
+      "    动画:",
+      "        [123456]作品名 [789]标题一部分 (说明[111])",
+      "        无ID作品 [222]标题一部分",
+      "备注 [333]",
+    ].join("\n");
+
+    const result = findBgmIdLinks(input);
+
+    assert.deepStrictEqual(result, [
+      {
+        id: "123456",
+        start: input.indexOf("[123456]"),
+        end: input.indexOf("[123456]") + "[123456]".length,
+      },
+    ]);
   });
 });
