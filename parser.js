@@ -129,7 +129,16 @@ function findBgmIdLinks(text) {
   const links = [];
   let lineStart = 0;
 
-  for (const line of text.split(/\r?\n/)) {
+  for (const match of text.matchAll(/[^\r\n]*(?:\r\n|\r|\n|$)/g)) {
+    const chunk = match[0];
+    if (chunk === "") break;
+
+    const line = chunk.endsWith("\r\n")
+      ? chunk.slice(0, -2)
+      : chunk.endsWith("\r") || chunk.endsWith("\n")
+        ? chunk.slice(0, -1)
+        : chunk;
+
     const parsed = parseEntryLine(line);
     if (parsed?.bgmId) {
       const token = `[${parsed.bgmId}]`;
@@ -143,7 +152,7 @@ function findBgmIdLinks(text) {
       }
     }
 
-    lineStart += line.length + 1;
+    lineStart += chunk.length;
   }
 
   return links;

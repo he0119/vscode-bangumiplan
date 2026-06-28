@@ -784,4 +784,28 @@ describe("BGM ID 链接辅助函数", () => {
       },
     ]);
   });
+
+  it("正确处理 CRLF 换行的链接偏移", () => {
+    const input = [
+      "正在看:",
+      "    动画:",
+      "        [123456]作品名",
+      "        [654321]另一部作品",
+    ].join("\r\n");
+
+    const result = findBgmIdLinks(input);
+
+    assert.deepStrictEqual(result, [
+      {
+        id: "123456",
+        start: input.indexOf("[123456]"),
+        end: input.indexOf("[123456]") + "[123456]".length,
+      },
+      {
+        id: "654321",
+        start: input.indexOf("[654321]"),
+        end: input.indexOf("[654321]") + "[654321]".length,
+      },
+    ]);
+  });
 });
