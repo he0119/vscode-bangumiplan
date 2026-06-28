@@ -9,6 +9,11 @@ search = "\"version\": \"{current_version}\""
 replace = "\"version\": \"{new_version}\""
 
 [[tool.bumpversion.files]]
+filename = "package-lock.json"
+search = "\"version\": \"{current_version}\""
+replace = "\"version\": \"{new_version}\""
+
+[[tool.bumpversion.files]]
 filename = "CHANGELOG.md"
 search = "## [Unreleased]"
 replace = "## [Unreleased]\n\n## [{new_version}] - {now:%Y-%m-%d}"
